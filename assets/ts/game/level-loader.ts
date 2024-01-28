@@ -5,6 +5,7 @@ import {$, RADIAN_QUARTER} from "../lib/util";
 import {BoxObject, Quadtree, setQuadtree, collisionStep, onCollision} from "../lib/collision";
 import {initPlayer} from "./player";
 import {initAudio} from "./audio";
+import {levels} from "./levels";
 
 const tree = new Quadtree(0, 0, 1024 * 2, 1024);
 setQuadtree(tree);
@@ -129,10 +130,12 @@ keymap.key("@", (x: number, y: number) => {
 (<HTMLElement>$("#c")).onclick = initAudio;
 
 $("#c").addEventListener("click", () => {
-  fetch("assets/levels/1.txt")
+  /*fetch("assets/levels/1.txt")
   .then(e => e.text())
   .then(txt => {
     (<HTMLElement>$("#start")).style.display = "none";
     keymap.run(txt);
-  });
+  });*/
+  (<HTMLElement>$("#start")).style.display = "none";
+  keymap.run(levels[0]);
 }, {once: true});
