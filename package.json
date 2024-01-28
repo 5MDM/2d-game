@@ -5,7 +5,9 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "vite --host"
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview --host"
   },
   "author": "",
   "license": "MIT",
