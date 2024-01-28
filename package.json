@@ -1,0 +1,24 @@
+{
+  "name": "nodejs-typescript",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "howler": "^2.2.4",
+    "node-fetch": "^3.3.1",
+    "pixi.js": "^7.3.2",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.10",
+    "vite-plugin-checker": "^0.6.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.1"
+  }
+}

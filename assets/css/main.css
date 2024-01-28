@@ -1,0 +1,95 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  touch-action: pan-x pan-y;
+  overflow: hidden;
+}
+
+html, body, main {
+  font-family: Trebuchet MS, sans-serif;
+}
+
+body {
+  font-size: 20px;
+}
+
+#c {
+  display: block;
+  margin: auto;
+  pointer-events: auto;
+  width: var(--w);
+  height: var(--h);
+}
+
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none; 
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  user-drag: none;
+  -webkit-user-drag: none;
+  -webkit-user-modify: none;
+  -webkit-highlight: none;
+  -webkit-user-callout: none;
+}
+
+img {
+  user-drag: none;
+  -webkit-user-drag: none;
+  touch-action: pan-x pan-y;
+  
+  -webkit-touch-callout: none;
+  -webkit-user-select: none; 
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  user-drag: none;
+  -webkit-user-drag: none;
+  -webkit-user-modify: none;
+  -webkit-highlight: none;
+  -webkit-user-callout: none;
+}
+
+#ui {
+  position: absolute;
+  display: flex;
+  width: var(--w);
+  height: var(--h);
+  pointer-events: none;
+}
+
+#ui > * {
+  margin: auto;
+  border: 1px solid blue;
+  width: var(--w);
+  height: var(--h);
+}
+
+#ui > #start {
+  
+}
+
+#ui > #controls {
+  display: flex;
+  position: relative;
+  width: 200px;
+  height: 100px;
+  bottom: 0;
+}
+
+#ui > #controls-c img {
+  width: 100px;
+  height: 100px;
+  filter: opacity(50%);
+  margin: 10px;
+  pointer-events: auto;
+}
+
+#ui > #controls-c img:active {
+  filter: opacity(100%);
+}
