@@ -21,6 +21,7 @@
     "vite-plugin-checker": "^0.6.2"
   },
   "devDependencies": {
+    "@types/howler": "^2.2.11",
     "@types/node": "^20.4.1"
   }
 }

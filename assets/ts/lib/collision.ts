@@ -10,7 +10,7 @@ function AABB(a: BoxObject, b: BoxObject): boolean {
   );
 }
 
-const collisionArray: (() => void)[] = [];
+const collisionArray: ((obj: BoxObject) => void)[] = [];
 
 export class Quadtree {
   x: number;
@@ -21,7 +21,7 @@ export class Quadtree {
   capacity: number = 4;
   total: number = 0;
   children: any = [];
-  quadtrees: Quadtree = [];
+  quadtrees: Quadtree[] = [];
   isLeaf: boolean = false;
   
   constructor(x: number, y: number, width: number, height: number) {
@@ -60,11 +60,7 @@ export class Quadtree {
   
   insert(o: BoxObject): boolean {
     // check if it's in bounds
-    if(!this.AABBCurrentBounds(o)) return;
-    
-    if(!this.isLeaf)
-      for(const tree of this.quadtrees)
-        if(tree.insert(o)) return true;
+    if(!this.AABBCurrentBounds(o)) return false;
     
     if(this.isLeaf) {
       /*if(this.total++ > this.capacity) throw new Error(
@@ -72,7 +68,12 @@ export class Quadtree {
       );*/
       this.children.push(o);
       return true;
+    } else {
+      for(const tree of this.quadtrees)
+        if(tree.insert(o)) return true;
     }
+    
+    return false;
   }
   
   subdivide(): void {
@@ -93,7 +94,7 @@ export class Quadtree {
     .push(new Quadtree(x + width, y + height, width, height));
   }
   
-  onCollision(f: (() => void)) {
+  onCollision(f: ((obj: BoxObject) => void)) {
     collisionArray.push(f);
   }
   
@@ -106,9 +107,7 @@ export class Quadtree {
         if(detected) return detected;
       }
       return false;
-    }
-    
-    if(this.isLeaf) {
+    } else {
       for(const box of this.children) {
         if(AABB(o, box)) {
           for(const f of collisionArray)
@@ -145,6 +144,8 @@ export class BoxObject {
   y: number;
   width: number;
   height: number;
+  halfWidth: number;
+  halfHeight: number;
   sprite: Sprite;
   isDynamic: boolean;
   dynamicId?: number;
@@ -188,7 +189,9 @@ export class BoxObject {
   }
   
   destroy(): void {
-    removeDynamicObject(this);
+    if(this.dynamicId != undefined)
+      removeDynamicObject(this.dynamicId);
+    
     this.sprite.destroy();
     
     this.dynamicId = NaN;
@@ -293,7 +296,7 @@ export class BoxObject {
     this.goDown(y);
     const collided = this.checkCollision();
     if(collided) {
-      this.collisionSeperationY(collided);
+      this.collisionSeperationY(collided as BoxObject);
       return true;
     }
     
@@ -313,7 +316,7 @@ function removeDynamicObject(id: number): void {
   delete dynamicObjects[id];
 }
 
-var onCollisionFunction: (() => void);
+var onCollisionFunction: ((obj: BoxObject) => void);
 
 export function collisionStep(): void {
   for(const id in dynamicObjects) {

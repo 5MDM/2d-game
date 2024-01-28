@@ -51,7 +51,7 @@ function playerObj(x: number, y: number): any {
   return {box, sprite};
 }
 
-function staticObj(x: number, y: number, texture: Texture, data: any): BoxObject {
+function staticObj(x: number, y: number, texture: Texture, data?: any): BoxObject {
   const sprite = new Sprite(texture);
   const box = new BoxObject({
     x: x * scaleSize + offsetX,
@@ -126,13 +126,13 @@ keymap.key("@", (x: number, y: number) => {
   initPlayer({player: box, tree});
 });
 
-$("#c").onclick = initAudio;
+(<HTMLElement>$("#c")).onclick = initAudio;
 
 $("#c").addEventListener("click", () => {
   fetch("assets/levels/1.txt")
   .then(e => e.text())
   .then(txt => {
-    $("#start").style.display = "none";
+    (<HTMLElement>$("#start")).style.display = "none";
     keymap.run(txt);
   });
 }, {once: true});

@@ -1,11 +1,11 @@
 import {Sprite, Ticker} from "pixi.js";
 import {$} from "../lib/util";
-import {BoxObject} from "../collision";
-import {Quadtree} from "../lib/collision";
+import {Quadtree, BoxObject} from "../lib/collision";
 import {audio} from "./audio";
 
 interface GlobalOpts {
-  player?: BoxObject;
+  [index: string]: any;
+  player: BoxObject | null;
   spawnX: number;
   spawnY: number;
   canJump: boolean;
@@ -20,6 +20,7 @@ interface GlobalOpts {
   jumps: number;
   maxJumps: number;
   maxInertia: number;
+  jumpSpeed: number;
   speed: number;
 }
 
@@ -43,7 +44,11 @@ const glo: GlobalOpts = {
   jumpSpeed: -innerHeight / 63,
 };
 
-const ogGlo = {
+const ogGlo: {
+  [index: string]: any;
+  speed: number;
+  jumpSpeed: number;
+} = {
   speed: glo.speed,
   jumpSpeed: glo.jumpSpeed,
 };
@@ -56,7 +61,7 @@ function disableControls(): void {
   glo.controls.isDisabled = true;
   glo.controls.right = false;
   glo.controls.left = false;
-  glo.controls.canJump = false;
+  glo.canJump = false;
 }
 
 export function initPlayer(o: {player: BoxObject, tree: Quadtree}): void {
@@ -96,7 +101,7 @@ export function initPlayer(o: {player: BoxObject, tree: Quadtree}): void {
     
     const collided = player.checkCollision();
     if(collided) {
-      player.collisionSeperationX(collided);
+      player.collisionSeperationX(collided as BoxObject);
     }
   });
   
@@ -123,15 +128,16 @@ export function initPlayer(o: {player: BoxObject, tree: Quadtree}): void {
 
 function death(): void {
   disableControls();
-  glo.player.sprite.tint = 0xfe8247;
+  glo.player!.sprite.tint = 0xfe8247;
   setTimeout(() => {
-    glo.player.sprite.tint = 0xffffff;
-    glo.player.teleport(glo.spawnX, glo.spawnY);
+    glo.player!.sprite.tint = 0xffffff;
+    glo.player!.teleport(glo.spawnX, glo.spawnY);
     enableControls();
   }, 500);
   
   audio.sfx.death.play();
 }
+
 
 function jump() {
   if(glo.canJump) {
