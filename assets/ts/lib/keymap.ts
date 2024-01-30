@@ -3,7 +3,7 @@ export class Keymap {
   
   keys: {[key: string]: (x: number, y: number) => void} = {};
   
-  onEnd: (() => void);
+  onEnd: (() => void) = () => undefined;
   
   async run(tx = "") {
     const self = this;

@@ -4,6 +4,7 @@ import {tree, stone, spike, jumpBlock, staticObj, spikeObj, playerObj, grass, se
 import {initAudio} from "./audio";
 import {initPlayer, disableControls, enableControls} from "./player";
 import {levels} from "./levels";
+import {BoxObject} from "../lib/collision";
 
 var playerBox: BoxObject;
 var playerExists: boolean = false;
@@ -84,13 +85,14 @@ $("#c").addEventListener("click", () => {
 }, {once: true});
 
 function loadLevel(n: number): void {
-  if(n != 0) clearLevel(n-1);
+  if(n != 0) clearLevel();
   (<HTMLElement>$("#start")).style.display = "none";
   keymap.run(levels[n]);
 }
 
 export function loadNewLevel(): void {
-  clearLevel(currentLevel++);
+  currentLevel++;
+  clearLevel();
   setLevel(currentLevel);
   loadLevel(currentLevel);
 }

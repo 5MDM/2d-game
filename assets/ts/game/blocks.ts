@@ -82,8 +82,8 @@ if(innerWidth >= 1440) {
 export function playerObj(x: number, y: number): any {
   const sprite = new Sprite(player);
   const box = new BoxObject({
-    x: x * scaleSize + offsetX,
-    y: y * scaleSize + offsetY,
+    x: x * scaleSize + window.offsetX,
+    y: y * scaleSize + window.offsetY,
     width: playerWidth,
     height: scaleSize,
     sprite,
