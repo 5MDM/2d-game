@@ -2,6 +2,7 @@ import {Sprite, Ticker} from "pixi.js";
 import {$} from "../lib/util";
 import {Quadtree, BoxObject} from "../lib/collision";
 import {audio} from "./audio";
+import {loadNewLevel} from "./level-loader";
 
 interface GlobalOpts {
   [index: string]: any;
@@ -53,11 +54,16 @@ const ogGlo: {
   jumpSpeed: glo.jumpSpeed,
 };
 
-function enableControls(): void {
+export function setSpawn(x: number, y: number): void {
+  glo.spawnX = x;
+  glo.spawnY = y;
+}
+
+export function enableControls(): void {
   glo.controls.isDisabled = false;
 }
 
-function disableControls(): void {
+export function disableControls(): void {
   glo.controls.isDisabled = true;
   glo.controls.right = false;
   glo.controls.left = false;
@@ -122,6 +128,10 @@ export function initPlayer(o: {player: BoxObject, tree: Quadtree}): void {
         
         sorted = true;
       }
+    }
+    
+    if(e.data.isLevelEnd) {
+      loadNewLevel();
     }
   });
 }

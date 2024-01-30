@@ -3,6 +3,8 @@ export class Keymap {
   
   keys: {[key: string]: (x: number, y: number) => void} = {};
   
+  onEnd: (() => void);
+  
   async run(tx = "") {
     const self = this;
     const txt = tx.split("\n");
@@ -20,6 +22,8 @@ export class Keymap {
         setTimeout(res, 10);
       });
     }
+    
+    setTimeout(() => this?.onEnd(), txt.length * 10);
   }
   
   key(text: string, func: (x: number, y: number) => void) {

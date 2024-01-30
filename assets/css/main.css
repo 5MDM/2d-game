@@ -65,13 +65,17 @@ img {
 
 #ui > * {
   margin: auto;
-  border: 1px solid blue;
   width: var(--w);
   height: var(--h);
 }
 
 #ui > #start {
-  
+  padding-top: calc(50vh - 30px);
+  border: 4px solid cyan;
+  background: white;
+  position: fixed;
+  z-index: 2;
+  text-align: center;
 }
 
 #ui > #controls {

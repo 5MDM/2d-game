@@ -76,6 +76,29 @@ export class Quadtree {
     return false;
   }
   
+  removeStatic(o: BoxObject): void {
+    if(o.isDynamic) throw new Error(
+      `collision.ts: dynamic objects can't be
+      removed using a static remover`
+    );
+    
+    const parent: Quadtree | boolean = 
+    this.getCollisionParent(o);
+    
+    if(parent) {
+      const found: number = 
+      (parent as Quadtree).children.indexOf(o);
+      
+      if(found == -1) throw new Error(
+        "collision.ts: deletion error"
+      );
+      
+      (parent as Quadtree).children.splice(found, 1);
+      
+      o.destroy();
+    }
+  }
+  
   subdivide(): void {
     const {x, y} = this;
     const width = this.width / 2;
@@ -96,6 +119,24 @@ export class Quadtree {
   
   onCollision(f: ((obj: BoxObject) => void)) {
     collisionArray.push(f);
+  }
+  
+  getCollisionParent(o: BoxObject): boolean | Quadtree {
+    if(!this.AABBCurrentBounds(o)) return false;
+    
+    if(!this.isLeaf) {
+      for(const tree of this.quadtrees) {
+        const detected = tree.getCollisionParent(o);
+        if(detected) return detected;
+      }
+      return false;
+    } else {
+      for(const box of this.children) {
+        if(AABB(o, box)) return this;
+      }
+
+      return false;
+    }
   }
   
   detectCollision(o: BoxObject): boolean | BoxObject {
@@ -137,6 +178,7 @@ interface BoxObjectOpts {
   data?: any;
 };
 
+var boxId: number = 0;
 export class BoxObject {
   lx: number;
   ly: number;
@@ -149,6 +191,7 @@ export class BoxObject {
   sprite: Sprite;
   isDynamic: boolean;
   dynamicId?: number;
+  boxId: number;
   data: any;
   
   constructor(o: BoxObjectOpts) {
@@ -167,6 +210,7 @@ export class BoxObject {
     this.sprite.y = this.y;
     this.sprite.width = this.width;
     this.sprite.height = this.height;
+    this.boxId = ++boxId;
     
     this.isDynamic = o.isDynamic ?? false;
     if(this.isDynamic) this.dynamicId = addDynamicObject(this);
@@ -192,6 +236,7 @@ export class BoxObject {
     if(this.dynamicId != undefined)
       removeDynamicObject(this.dynamicId);
     
+    app.stage.removeChild(this.sprite);
     this.sprite.destroy();
     
     this.dynamicId = NaN;
