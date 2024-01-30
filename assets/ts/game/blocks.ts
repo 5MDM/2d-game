@@ -63,12 +63,13 @@ Texture.from(await loadImg("portal.png"));
 
 var scaleSize = 32;
 var playerWidth = scaleSize - 8;
-window.offsetX = scaleSize;
-window.offsetY = -scaleSize * 5;
+var offsetX = scaleSize;
+var offsetY = -scaleSize * 5;
+
 
 export function tpPlayerToSpawn(o: BoxObject, x: number, y: number): void {
-  const px = x * scaleSize + window.offsetX;
-  const py = y * scaleSize + window.offsetY;
+  const px = x * scaleSize + offsetX;
+  const py = y * scaleSize + offsetY;
   o.teleport(px, py);
   setSpawn(px, py);
 }
@@ -76,14 +77,14 @@ export function tpPlayerToSpawn(o: BoxObject, x: number, y: number): void {
 if(innerWidth >= 1440) {
   scaleSize = 10;
   playerWidth = 10;
-  window.offsetY = 100;
+  offsetY = 100;
 }
 
 export function playerObj(x: number, y: number): any {
   const sprite = new Sprite(player);
   const box = new BoxObject({
-    x: x * scaleSize + window.offsetX,
-    y: y * scaleSize + window.offsetY,
+    x: x * scaleSize + offsetX,
+    y: y * scaleSize + offsetY,
     width: playerWidth,
     height: scaleSize,
     sprite,
@@ -101,8 +102,8 @@ export function playerObj(x: number, y: number): any {
 export function staticObj(x: number, y: number, texture: Texture, data?: any): BoxObject {
   const sprite = new Sprite(texture);
   const box = new BoxObject({
-    x: x * scaleSize + window.offsetX,
-    y: y * scaleSize + window.offsetY,
+    x: x * scaleSize + offsetX,
+    y: y * scaleSize + offsetY,
     width: scaleSize,
     height: scaleSize,
     sprite,
@@ -120,15 +121,15 @@ export function spikeObj(x: number, y: number, texture: Texture, rotation?: numb
   sprite.anchor.set(0.5, 0.5);
 
   const box = new BoxObject({
-    x: x * scaleSize + window.offsetX + 10,
-    y: y * scaleSize + window.offsetY + 10,
+    x: x * scaleSize + offsetX + 10,
+    y: y * scaleSize + offsetY + 10,
     width: scaleSize / 2,
     height: scaleSize / 3,
     sprite,
     data: {isSpike: true},
   });
-  sprite.x = x * scaleSize + window.offsetX;
-  sprite.y = y * scaleSize + window.offsetY;
+  sprite.x = x * scaleSize + offsetX;
+  sprite.y = y * scaleSize + offsetY;
   sprite.width = scaleSize;
   sprite.height = scaleSize;
   sprite.x += sprite.width / 2;
