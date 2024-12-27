@@ -79,38 +79,40 @@ export function initPlayer(o: {player: BoxObject, tree: Quadtree}): void {
   
   initControls();
 
-  Ticker.shared.add(time => {
-    if(glo.controls.isDisabled) return;
-    if(!glo.isJumping) {
-      if(player.applyGravity(2 + glo.inertia)) {
-        glo.inertia = 0;
-        glo.canJump = true;
-        glo.jumps = 0;
-      } else {
-        //glo.canJump = false;
-        if(glo.inertia < glo.maxInertia) glo.inertia += 0.8;
-      }
-    } else {
-      if(player.applyGravity(2 + glo.inertia)) {
-        glo.inertia = 0;
-        if(player.applyGravity(0.01)) {
-          if(glo.jumps >= glo.maxJumps) glo.canJump = false;
-          glo.isJumping = false;
+  function loop() {
+      if(glo.controls.isDisabled) return;
+      if(!glo.isJumping) {
+        if(player.applyGravity(2 + glo.inertia)) {
+          glo.inertia = 0;
+          glo.canJump = true;
+          glo.jumps = 0;
+        } else {
+          //glo.canJump = false;
+          if(glo.inertia < glo.maxInertia) glo.inertia += 0.8;
         }
       } else {
-        glo.inertia += 0.7;
+        if(player.applyGravity(2 + glo.inertia)) {
+          glo.inertia = 0;
+          if(player.applyGravity(0.01)) {
+            if(glo.jumps >= glo.maxJumps) glo.canJump = false;
+            glo.isJumping = false;
+          }
+        } else {
+          glo.inertia += 0.7;
+        }
       }
-    }
-    
-    if(glo.controls.right) player.goRight(glo.speed * time);
-    if(glo.controls.left ) player.goLeft (glo.speed * time);
-    
-    const collided = player.checkCollision();
-    if(collided) {
-      player.collisionSeperationX(collided as BoxObject);
-    }
-  });
-  
+      
+      if(glo.controls.right) player.goRight(glo.speed);
+      if(glo.controls.left ) player.goLeft (glo.speed);
+      
+      const collided = player.checkCollision();
+      if(collided) {
+        player.collisionSeperationX(collided as BoxObject);
+      }
+  }
+
+  setInterval(loop, 1000/70);
+
   var sorted: boolean = true;
   var lastModifiers = {};
   o.tree.onCollision((e: BoxObject) => {

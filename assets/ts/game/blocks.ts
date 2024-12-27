@@ -61,7 +61,7 @@ Texture.from(await loadImg("grass.png"));
 export const portal = 
 Texture.from(await loadImg("portal.png"));
 
-var scaleSize = 32;
+var scaleSize = 24;
 var playerWidth = scaleSize - 8;
 var offsetX = scaleSize;
 var offsetY = -scaleSize * 5;

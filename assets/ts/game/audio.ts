@@ -16,6 +16,6 @@ export function initAudio(): void {
   
   audio.sfx.death = new Howl({
     src: ["assets/audio/death.mp3"],
-    volume: 0.04,
+    volume: 0.01,
   });
 }
